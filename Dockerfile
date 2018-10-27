@@ -17,7 +17,8 @@ RUN apt-get install -y protobuf-compiler \
   libatlas-base-dev gfortran \
   #python2.7-dev \
   python-dev \
-  python-tk 
+  python-tk \
+  vim
   
 RUN pip install opencv-python==3.4.0.12 requests
   
