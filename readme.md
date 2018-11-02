@@ -51,6 +51,11 @@ python generate_tfrecord.py --csv_input=images/test_labels.csv --image_dir=image
 ```
 
 ## 6 Train
+Update .config file for the model with the correct number of examples.
+
+    num_classes: NUMBER_OF_CLASSES
+    num_examples: NUMBER_OF_TEST_IMAGES
+
 Run this command.
 
 ```
