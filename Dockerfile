@@ -1,6 +1,6 @@
 FROM tensorflow/tensorflow:1.5.0-devel-gpu
 
-# Did not work, seg fault when trying to train
+# Did not work, seg fault when trying to train, using version 1.5.0, that works
 # FROM tensorflow/tensorflow:latest-gpu
 
 RUN apt-get update && apt-get install -y \
@@ -15,7 +15,6 @@ RUN apt-get install -y protobuf-compiler \
   libxvidcore-dev libx264-dev \
   libgtk-3-dev \
   libatlas-base-dev gfortran \
-  #python2.7-dev \
   python-dev \
   python-tk \
   vim
@@ -42,23 +41,22 @@ RUN protoc object_detection/protos/*.proto --python_out=.
 RUN echo "export PYTHONPATH=${PYTHONPATH}:`pwd`:`pwd`/slim" >> ~/.bashrc
 RUN python setup.py install
 
-# If we reset the repo we do not need to copy this file
+# If we reset the repo we do not need to copy this file since it is legacy by now
 # RUN cp /tensorflow/models/research/object_detection/legacy/train.py  /tensorflow/models/research/object_detection/
 
-# Yolo
 WORKDIR /
 
 RUN git clone https://github.com/simtrax/TensorFlow-Object-Detection-API-Tutorial-Train-Multiple-Objects-Windows-10 tf_repo
 
-RUN mv tf_repo/images /tensorflow/models/research/object_detection/
-RUN mv tf_repo/training /tensorflow/models/research/object_detection/
-
+RUN mv tf_repo/xml_to_csv.py /tensorflow/models/research/object_detection/
 RUN mv tf_repo/generate_tfrecord.py /tensorflow/models/research/object_detection/
+
 RUN mv tf_repo/Object_detection_image.py /tensorflow/models/research/object_detection/
 RUN mv tf_repo/Object_detection_video.py /tensorflow/models/research/object_detection/
 RUN mv tf_repo/Object_detection_webcam.py /tensorflow/models/research/object_detection/
 
 WORKDIR /
+
 # Clean up
 RUN rm -r tf_repo
 
@@ -69,7 +67,5 @@ RUN mv faster_rcnn_inception_v2_coco_2018_01_28 /tensorflow/models/research/obje
 
 # Clean up
 RUN rm faster_rcnn_inception_v2_coco_2018_01_28.tar.gz
-
-RUN sed -i 's/C:\/tensorflow1/\/tensorflow/g' /tensorflow/models/research/object_detection/training/faster_rcnn_inception_v2_pets.config
 
 CMD ["echo", "Running tensorflow docker"]
