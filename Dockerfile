@@ -1,8 +1,5 @@
 FROM tensorflow/tensorflow:1.10.0-devel-gpu
 
-# Did not work, seg fault when trying to train
-# FROM tensorflow/tensorflow:latest-gpu
-
 RUN apt-get update && apt-get install -y \
   git
 
@@ -40,7 +37,15 @@ RUN protoc object_detection/protos/*.proto --python_out=.
 RUN echo "export PYTHONPATH=${PYTHONPATH}:`pwd`:`pwd`/slim" >> ~/.bashrc
 RUN python setup.py install
 
-RUN cp /tensorflow/models/research/object_detection/legacy/train.py  /tensorflow/models/research/object_detection/
+RUN cp /tensorflow/models/research/object_detection/legacy/train.py /tensorflow/models/research/object_detection/
+RUN cp /tensorflow/models/research/object_detection/legacy/eval.py /tensorflow/models/research/object_detection/
+
+WORKDIR /
+
+RUN git clone https://github.com/cocodataset/cocoapi.git
+WORKDIR cocoapi/PythonAPI
+RUN make
+RUN cp -r pycocotools /tensorflow/models/research/
 
 WORKDIR /
 
