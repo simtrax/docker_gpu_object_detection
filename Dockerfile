@@ -1,6 +1,6 @@
-FROM tensorflow/tensorflow:1.5.0-devel-gpu
+FROM tensorflow/tensorflow:1.10.0-devel-gpu
 
-# Did not work, seg fault when trying to train, using version 1.5.0, that works
+# Did not work, seg fault when trying to train
 # FROM tensorflow/tensorflow:latest-gpu
 
 RUN apt-get update && apt-get install -y \
@@ -33,7 +33,6 @@ RUN mv protoc3/include/* /usr/local/include/
 
 # Reset to previous commit
 WORKDIR models
-RUN git reset --hard 079d67d9a0b3407e8d074a200780f3835413ef99
 
 WORKDIR /tensorflow/models/research
 
@@ -41,8 +40,7 @@ RUN protoc object_detection/protos/*.proto --python_out=.
 RUN echo "export PYTHONPATH=${PYTHONPATH}:`pwd`:`pwd`/slim" >> ~/.bashrc
 RUN python setup.py install
 
-# If we reset the repo we do not need to copy this file since it is legacy by now
-# RUN cp /tensorflow/models/research/object_detection/legacy/train.py  /tensorflow/models/research/object_detection/
+RUN cp /tensorflow/models/research/object_detection/legacy/train.py  /tensorflow/models/research/object_detection/
 
 WORKDIR /
 
