@@ -69,8 +69,19 @@ Run the following command in the objec detection folder
 tensorboard --logdir=training
 ```
 
+### Evaluate training
+```
+python eval.py --logtostderr --pipeline_config_path=training/faster_rcnn_inception_v2_pets.config --checkpoint_dir=training/ --eval_dir=eval/
+```
+
+Open another terminal window and exec bash in container  
+Run this command in the `/tensorflow/models/research/object_detection` folder.
+```
+tensorboard --logdir=training
+```
+
 ## 5 Export graph
-Replace “XXXX” in “model.ckpt-XXXX” with the highest-numbered .ckpt file in the training folder.
+Replace “XXXX” in `model.ckpt-XXXX` with the highest-numbered .ckpt file in the training folder.
 
 ```
 python export_inference_graph.py --input_type image_tensor --pipeline_config_path training/faster_rcnn_inception_v2_pets.config --trained_checkpoint_prefix training/model.ckpt-XXXX --output_directory inference_graph
