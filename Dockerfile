@@ -28,9 +28,6 @@ RUN unzip protoc-3.2.0-linux-x86_64.zip -d protoc3
 RUN mv protoc3/bin/* /usr/local/bin/
 RUN mv protoc3/include/* /usr/local/include/
 
-# Reset to previous commit
-WORKDIR models
-
 WORKDIR /tensorflow/models/research
 
 RUN protoc object_detection/protos/*.proto --python_out=.
@@ -47,21 +44,13 @@ WORKDIR cocoapi/PythonAPI
 RUN make
 RUN cp -r pycocotools /tensorflow/models/research/
 
-WORKDIR /
+WORKDIR /tensorflow/models/research/object_detection/
 
-RUN git clone https://github.com/simtrax/TensorFlow-Object-Detection-API-Tutorial-Train-Multiple-Objects-Windows-10 tf_repo
-
-RUN mv tf_repo/xml_to_csv.py /tensorflow/models/research/object_detection/
-RUN mv tf_repo/generate_tfrecord.py /tensorflow/models/research/object_detection/
-
-RUN mv tf_repo/Object_detection_image.py /tensorflow/models/research/object_detection/
-RUN mv tf_repo/Object_detection_video.py /tensorflow/models/research/object_detection/
-RUN mv tf_repo/Object_detection_webcam.py /tensorflow/models/research/object_detection/
+RUN curl -OL https://raw.githubusercontent.com/simtrax/TensorFlow-Object-Detection-API-Tutorial-Train-Multiple-Objects-Windows-10/master/xml_to_csv.py
+RUN curl -OL https://raw.githubusercontent.com/simtrax/TensorFlow-Object-Detection-API-Tutorial-Train-Multiple-Objects-Windows-10/master/generate_tfrecord.py
+RUN curl -OL https://raw.githubusercontent.com/simtrax/TensorFlow-Object-Detection-API-Tutorial-Train-Multiple-Objects-Windows-10/master/Object_detection_image.py
 
 WORKDIR /
-
-# Clean up
-RUN rm -r tf_repo
 
 RUN curl -OL http://download.tensorflow.org/models/object_detection/faster_rcnn_inception_v2_coco_2018_01_28.tar.gz
 RUN tar -xvzf faster_rcnn_inception_v2_coco_2018_01_28.tar.gz
@@ -71,4 +60,4 @@ RUN mv faster_rcnn_inception_v2_coco_2018_01_28 /tensorflow/models/research/obje
 # Clean up
 RUN rm faster_rcnn_inception_v2_coco_2018_01_28.tar.gz
 
-CMD ["echo", "Running tensorflow docker"]
+CMD tail -f /dev/null

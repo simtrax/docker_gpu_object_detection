@@ -2,3 +2,8 @@ item {
   id: 1
   name: 'plant'
 }
+
+item {
+  id: 2
+  name: 'plant2'
+}

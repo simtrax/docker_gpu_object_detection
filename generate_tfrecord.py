@@ -31,6 +31,8 @@ FLAGS = flags.FLAGS
 def class_text_to_int(row_label):
     if row_label == 'plant':
         return 1
+    elif row_label == 'plant2':
+        return 2
     else:
         None
 
